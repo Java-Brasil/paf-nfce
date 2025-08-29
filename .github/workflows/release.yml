@@ -34,13 +34,12 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
+          git config --global user.email "rodrigo@rcconsultoria.inf.br"
+          git config --global user.name "Rodrigo Cananea"
 
       - name: Import GPG key
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
           gpg --list-secret-keys --keyid-format LONG
@@ -76,10 +75,9 @@ jobs:
           EOF
 
       - name: Deploy to Maven Central
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          mvn clean deploy -Dgpg.passphrase="${GPG_PASSPHRASE}" --no-transfer-progress
+          # Como não há passphrase, removemos a variável de ambiente
+          mvn clean deploy --no-transfer-progress
 
       - name: Create GitHub Release
         uses: actions/create-release@v1

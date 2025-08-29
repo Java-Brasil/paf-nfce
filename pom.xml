@@ -106,6 +106,14 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                                <arg>--no-tty</arg>
+                            </gpgArguments>
+                            <!-- Como não há passphrase, removemos a configuração -->
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
