@@ -39,7 +39,7 @@ public class PafD2 implements PafRegistro {
         return String.format("%-" + tamanho + "s", texto == null ? "" : texto);
     }
 
-    @SuppressWarnings("squid:S3457")
+    @SuppressWarnings({"squid:S3457", "SameParameterValue"})
     private String padLeft(String texto, int tamanho) {
         return String.format("%" + tamanho + "s", texto == null ? "" : texto).replace(' ', '0');
     }

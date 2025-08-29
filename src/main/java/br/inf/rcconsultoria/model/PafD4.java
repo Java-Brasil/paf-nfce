@@ -31,12 +31,12 @@ public class PafD4 implements PafRegistro {
                 dataCancelamento.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
 
-    @SuppressWarnings("squid:S3457")
+    @SuppressWarnings({"squid:S3457", "SameParameterValue"})
     private String padRight(String texto, int tamanho) {
         return String.format("%-" + tamanho + "s", texto == null ? "" : texto);
     }
 
-    @SuppressWarnings("squid:S3457")
+    @SuppressWarnings({"squid:S3457", "SameParameterValue"})
     private String padLeft(String texto, int tamanho) {
         return String.format("%" + tamanho + "s", texto == null ? "" : texto).replace(' ', '0');
     }

@@ -46,11 +46,6 @@ public class PafGerador {
         this.certificado = certificado;
     }
 
-    public PafGerador(List<Paf> pafs, Certificado certificado) {
-        this.pafs = pafs;
-        this.certificado = certificado;
-    }
-
     public void gerar() throws Exception {
         validador();
         for (Paf paf : pafs) {

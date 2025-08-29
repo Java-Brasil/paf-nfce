@@ -23,6 +23,7 @@ public enum PafTotalizadorParcialEnum {
     private final String nome;
     private final String conteudo;
 
+    @SuppressWarnings("unused")
     public static PafTotalizadorParcialEnum fromCodigo(String codigo) {
         for (PafTotalizadorParcialEnum e : values()) {
             if (e.codigo.equalsIgnoreCase(codigo)) return e;

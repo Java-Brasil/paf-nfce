@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public enum PafArquivoTipo {
 
     MOVIMENTO("I", "MOVIMENTO.TXT"),

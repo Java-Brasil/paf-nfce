@@ -1,5 +1,6 @@
 package br.inf.rcconsultoria;
 
+@SuppressWarnings("unused")
 public class PafException extends Exception {
 
     public PafException(String message) {
