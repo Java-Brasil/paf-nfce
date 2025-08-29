@@ -45,6 +45,11 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          gpgconf --kill gpg-agent
+          gpgconf --launch gpg-agent
           
           # Lista as chaves para debug
           echo "=== Lista de chaves importadas ==="
@@ -55,8 +60,8 @@ jobs:
           KEY_ID=$(cat /tmp/key_id)
           echo "=== Configurando chave como confiável: $KEY_ID ==="
           
-          # Testa a assinatura
-          echo "test" | gpg --clearsign --armor --pinentry-mode loopback --batch
+          # Teste: deve funcionar sem erro se senha estiver certa
+          echo "test" | gpg --clearsign --armor --pinentry-mode loopback --batch --passphrase "$GPG_PASSPHRASE"
 
       - name: Set release version
         run: |
