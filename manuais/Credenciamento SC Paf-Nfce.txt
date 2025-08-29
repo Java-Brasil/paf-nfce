@@ -1,0 +1,28 @@
+Credenciamento SC
+
+https://sat.sef.sc.gov.br/tax.NET/Apps.aspx
+USUARIO: *usuario*
+SENHA: *senha*
+
+https://sat.sef.sc.gov.br/tax.NET/sat.cei.web/paf/autorizacaodeuso/manutencao.aspx
+Incluir PAF
+Tipo de PAF 
+PAF-NFC-e
+Cnpj ou IE
+Avançar
+Seleciona aplicativo
+SISWEB
+Salvar
+
+https://tributario.sef.sc.gov.br/tax.NET/Sat.Dfe.NFCe.Web/GestaoDeCscs.aspx
+Entrar com certificado(Cliente)
+CNPJ
+Avançar
+Ambiente produção
+Gerar novo csc
+
+Obs: A partir da criação da Autorização de Uso do PAF, a SEF-SC envia
+as informações para a Sefaz Virtual do RS (SVRS), que é o órgão autorizador de NFe e de NFC-e para o estado de Santa Catarina e para diversos outros estados do país.
+A SVRS realiza o cadastro (de forma automática) até a manhã do dia seguinte. Assim,
+embora apareça com a informação como emissor de NFC-e no cadastro de SC, é
+possível que a empresa só estará apta a emitir NFC-e no dia seguinte.
