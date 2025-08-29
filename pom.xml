@@ -111,7 +111,7 @@
                                 <arg>loopback</arg>
                                 <arg>--no-tty</arg>
                             </gpgArguments>
-                            <!-- Como não há passphrase, removemos a configuração -->
+                            <passphraseServerId>gpg</passphraseServerId>
                         </configuration>
                     </execution>
                 </executions>
