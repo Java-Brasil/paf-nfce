@@ -15,7 +15,7 @@
     <scm>
         <connection>scm:git:git://github.com/Java-Brasil/paf-nfce.git</connection>
         <developerConnection>scm:git:ssh://github.com:Java-Brasil/paf-nfce.git</developerConnection>
-        <url>https://github.com/Java-Brasil/paf-nfce/tree/main</url>
+        <url>https://github.com/Java-Brasil/paf-nfce/tree/master</url>
     </scm>
 
     <licenses>
@@ -41,7 +41,6 @@
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-        <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
@@ -143,6 +142,14 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                                <arg>--batch</arg>
+                                <arg>--no-tty</arg>
+                            </gpgArguments>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -155,7 +162,6 @@
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                     <autoPublish>true</autoPublish>
-                    <waitUntil>published</waitUntil>
                 </configuration>
             </plugin>
 

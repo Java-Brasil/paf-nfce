@@ -27,6 +27,11 @@ jobs:
         with:
           java-version: '8'
           distribution: 'temurin'
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Cache Maven dependencies
         uses: actions/cache@v4
@@ -39,30 +44,6 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-
-      - name: Import and configure GPG key
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-          gpgconf --kill gpg-agent
-          gpgconf --launch gpg-agent
-          
-          # Lista as chaves para debug
-          echo "=== Lista de chaves importadas ==="
-          gpg --list-secret-keys --keyid-format LONG
-          
-          # Configura a chave como confiável
-          gpg --list-secret-keys --keyid-format LONG | grep sec | head -1 | awk '{print $2}' | cut -d'/' -f2 > /tmp/key_id
-          KEY_ID=$(cat /tmp/key_id)
-          echo "=== Configurando chave como confiável: $KEY_ID ==="
-          
-          # Teste: deve funcionar sem erro se senha estiver certa
-          echo "test" | gpg --clearsign --armor --pinentry-mode loopback --batch --passphrase "$GPG_PASSPHRASE"
 
       - name: Set release version
         run: |
@@ -77,43 +58,18 @@ jobs:
           mvn versions:set -DnewVersion=$VERSION
           mvn versions:commit
 
-      - name: Create Maven settings
-        run: |
-          mkdir -p ~/.m2
-          cat > ~/.m2/settings.xml << EOF
-          <settings>
-            <servers>
-              <server>
-                <id>central</id>
-                <username>${{ secrets.MAVEN_CENTRAL_USERNAME }}</username>
-                <password>${{ secrets.MAVEN_CENTRAL_PASSWORD }}</password>
-              </server>
-            </servers>
-            <profiles>
-              <profile>
-                <id>ossrh</id>
-                <activation>
-                  <activeByDefault>true</activeByDefault>
-                </activation>
-                <properties>
-                  <gpg.executable>gpg</gpg.executable>
-                  <gpg.passphrase>${{ secrets.GPG_PASSPHRASE }}</gpg.passphrase>
-                </properties>
-              </profile>
-            </profiles>
-          </settings>
-          EOF
-
       - name: Build and test
         run: |
           mvn clean compile -q
           mvn test -DskipTests=true || echo "Tests skipped for CI compatibility"
 
       - name: Deploy to Maven Central
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          mvn clean deploy -Dgpg.passphrase="$GPG_PASSPHRASE" -DskipTests --no-transfer-progress -X
+          mvn --batch-mode deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Create GitHub Release
         if: success()
