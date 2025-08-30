@@ -70,23 +70,35 @@ jobs:
           export GPG_TTY=$(tty)
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          mvn -B --file pom.xml \
-            -Prelease \
-            -DskipTests \
-            deploy
+          mvn deploy -B
 
-      - name: Run JReleaser
-        uses: jreleaser/release-action@v2
-        env:
-          JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          JRELEASER_MAVENCENTRAL_SONATYPE_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          JRELEASER_MAVENCENTRAL_SONATYPE_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-
-      - name: JReleaser output
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Create GitHub Release
+        if: success()
+        uses: softprops/action-gh-release@v2
         with:
-          name: jreleaser-logs
-          path: |
-            out/jreleaser/trace.log
-            out/jreleaser/output.properties
+          tag_name: v${{ env.RELEASE_VERSION }}
+          name: Release v${{ env.RELEASE_VERSION }}
+          body: |
+            ## Release v${{ env.RELEASE_VERSION }}
+            
+            🚀 **Published to Maven Central**
+            
+            ### Maven Dependency
+            ```xml
+            <dependency>
+                <groupId>br.inf.rcconsultoria</groupId>
+                <artifactId>paf-nfce</artifactId>
+                <version>${{ env.RELEASE_VERSION }}</version>
+            </dependency>
+            ```
+            
+            ### Gradle Dependency
+            ```gradle
+            implementation 'br.inf.rcconsultoria:paf-nfce:${{ env.RELEASE_VERSION }}'
+            ```
+          draft: false
+          prerelease: false
+          files: |
+            target/paf-nfce-${{ env.RELEASE_VERSION }}.jar
+            target/paf-nfce-${{ env.RELEASE_VERSION }}-sources.jar
+            target/paf-nfce-${{ env.RELEASE_VERSION }}-javadoc.jar
