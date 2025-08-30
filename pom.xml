@@ -6,16 +6,18 @@
 
     <groupId>br.inf.rcconsultoria</groupId>
     <artifactId>paf-nfce</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>Paf-NFCe</name>
     <description>Biblioteca java para geração de PAF-NFCe</description>
     <url>https://github.com/Java-Brasil/paf-nfce</url>
+    <inceptionYear>2025</inceptionYear>
 
     <scm>
         <connection>scm:git:git://github.com/Java-Brasil/paf-nfce.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Java-Brasil/paf-nfce.git</developerConnection>
-        <url>https://github.com/Java-Brasil/paf-nfce/tree/master</url>
+        <developerConnection>scm:git:ssh://git@github.com:Java-Brasil/paf-nfce.git</developerConnection>
+        <url>https://github.com/Java-Brasil/paf-nfce</url>
+        <tag>HEAD</tag>
     </scm>
 
     <licenses>
@@ -27,9 +29,10 @@
     </licenses>
 
     <properties>
+        <!-- IMPORTANTE: Manter Java 8 para compatibilidade da biblioteca -->
         <java.version>1.8</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Dependency Versions -->
@@ -39,27 +42,28 @@
 
         <!-- Build Versions -->
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
-        <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
+        <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
+        <jreleaser-maven-plugin.version>1.19.0</jreleaser-maven-plugin.version>
     </properties>
 
     <distributionManagement>
         <snapshotRepository>
-            <id>central</id>
-            <url>https://central.sonatype.com/</url>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>central</id>
-            <url>https://central.sonatype.com/</url>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
     <developers>
         <developer>
-            <id>Rodrigo-Cananea</id>
+            <id>rodrigocananea</id>
             <name>Rodrigo Aguiar Vidal Cananea</name>
             <email>rodrigo@rcconsultoria.inf.br</email>
             <url>https://github.com/rodrigocananea</url>
@@ -94,8 +98,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <!-- Força compilação para Java 8 -->
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <release>8</release>
                 </configuration>
             </plugin>
 
@@ -128,18 +134,28 @@
                 <configuration>
                     <failOnError>false</failOnError>
                     <doclint>none</doclint>
+                    <!-- Configuração específica para Java 8 -->
+                    <source>8</source>
                 </configuration>
             </plugin>
 
             <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>${central-publishing-maven-plugin.version}</version>
-                <extensions>true</extensions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
                 <configuration>
-                    <publishingServerId>central</publishingServerId>
-                    <autoPublish>true</autoPublish>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jreleaser</groupId>
+                <artifactId>jreleaser-maven-plugin</artifactId>
+                <version>${jreleaser-maven-plugin.version}</version>
+                <inherited>false</inherited>
             </plugin>
 
             <plugin>
@@ -172,7 +188,6 @@
                                         <arg>loopback</arg>
                                         <arg>--batch</arg>
                                         <arg>--no-tty</arg>
-                                        <arg>--yes</arg>
                                     </gpgArguments>
                                 </configuration>
                             </execution>
