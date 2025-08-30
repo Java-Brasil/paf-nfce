@@ -223,7 +223,6 @@ Contribuições são bem-vindas! Por favor:
 3. **Commit** suas mudanças (`git commit -am 'Adiciona nova funcionalidade'`)
 4. **Push** para a branch (`git push origin feature/nova-funcionalidade`)
 5. Abra um **Pull Request**
-6. 
 ---
 
 <div align="center">
