@@ -28,38 +28,12 @@ release:
     changelog:
       formatted: ALWAYS
       preset: conventional-commits
-      contributors:
-        format: '- {{contributorName}}'
-      labelers:
-        - label: 'dependencies'
-          title: 'regex:^(?:deps(?:\(.*\))?!?):\s.*'
-        - label: 'feature'
-          title: 'regex:^(?:feat(?:\(.*\))?!?):\s.*'
-        - label: 'bug'
-          title: 'regex:^(?:fix(?:\(.*\))?!?):\s.*'
-      categories:
-        - title: '🚀 Features'
-          labels:
-            - 'feature'
-        - title: '🐛 Bug Fixes'
-          labels:
-            - 'bug'
-        - title: '📦 Dependencies'
-          labels:
-            - 'dependencies'
-      hide:
-        categories:
-          - 'merge'
-        contributors:
-          - 'GitHub'
 
 deploy:
   maven:
-    nexus2:
-      maven-central:
+    mavenCentral:
+      sonatype:
         active: ALWAYS
-        url: https://s01.oss.sonatype.org/service/local
-        closeRepository: true
-        releaseRepository: true
+        url: https://central.sonatype.com/api/v1/publisher
         stagingRepositories:
           - target/staging-deploy
